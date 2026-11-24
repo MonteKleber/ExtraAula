@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: extraaula-api
+    runtime: python
+    rootDir: backend
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.14"
+      - key: APP_ENV
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: AUTO_SEED
+        value: "true"
+      - key: PLATFORM_COMMISSION_RATE
+        value: "0.15"
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: CORS_ORIGINS
+        value: https://extraaula.vercel.app,http://localhost:5173
+      - key: CORS_ORIGIN_REGEX
+        value: "https://.*\\.vercel\\.app"
+      - key: FRONTEND_BASE_URL
+        value: https://extraaula.vercel.app
