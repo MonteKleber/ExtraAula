@@ -1,0 +1,49 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-extraaula}
+      POSTGRES_USER: ${POSTGRES_USER:-extraaula}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-extraaula_dev_pass}
+    ports:
+      - "5432:5432"
+    volumes:
+      - extraaula_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-extraaula} -d ${POSTGRES_DB:-extraaula}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      APP_NAME: ExtraAula API
+      APP_ENV: production
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-extraaula}:${POSTGRES_PASSWORD:-extraaula_dev_pass}@db:5432/${POSTGRES_DB:-extraaula}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-change-this-super-secret-key-in-production-extraaula-2026}
+      PLATFORM_COMMISSION_RATE: ${PLATFORM_COMMISSION_RATE:-0.15}
+      CORS_ORIGINS: http://localhost:3000,http://localhost:5173
+      FRONTEND_BASE_URL: http://localhost:3000
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: ""
+        VITE_WS_URL: ""
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+
+volumes:
+  extraaula_pgdata:
