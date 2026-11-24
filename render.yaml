@@ -23,8 +23,8 @@ services:
       - key: DATABASE_URL
         sync: false
       - key: CORS_ORIGINS
-        value: https://extraaula.vercel.app,http://localhost:5173
+        value: https://extra-aula.vercel.app,http://localhost:5173
       - key: CORS_ORIGIN_REGEX
         value: "https://.*\\.vercel\\.app"
       - key: FRONTEND_BASE_URL
-        value: https://extraaula.vercel.app
+        value: https://extra-aula.vercel.app

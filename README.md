@@ -1,5 +1,7 @@
 # ExtraAula — Plataforma EdTech de Mentoria e Reforço Acadêmico sob Demanda
 
+> **Demo online (Produção)**: https://extra-aula.vercel.app/
+
 MVP funcional de uma plataforma EdTech que combina:
 - **Uber**: descoberta de professores disponíveis em tempo real com filtros de disciplina, nota e disponibilidade.
 - **InDrive**: negociação livre de valores em tokens com propostas, contrapropostas e sugestão de horário.
